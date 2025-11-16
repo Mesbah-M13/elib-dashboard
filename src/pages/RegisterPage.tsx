@@ -41,13 +41,13 @@ function RegisterPage({ ...props }: React.ComponentProps<typeof Card>) {
                     Must be at least 8 characters long.
                   </FieldDescription>
                 </Field>
-                <Field>
+                {/* <Field>
                   <FieldLabel htmlFor="confirm-password">
                     Confirm Password
                   </FieldLabel>
                   <Input id="confirm-password" type="password" required />
                   <FieldDescription>Please confirm your password.</FieldDescription>
-                </Field>
+                </Field> */}
                 <FieldGroup>
                   <Field>
                     <Button type="submit">Create Account</Button>
@@ -55,7 +55,7 @@ function RegisterPage({ ...props }: React.ComponentProps<typeof Card>) {
                       Sign up with Google
                     </Button> */}
                     <FieldDescription className="px-6 text-center">
-                      Already have an account? <a href="#">Sign in</a>
+                      Already have an account? <a href={'/login'} >Sign in</a>
                     </FieldDescription>
                   </Field>
                 </FieldGroup>
