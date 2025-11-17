@@ -4,11 +4,27 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../co
 import { Field, FieldDescription, FieldGroup, FieldLabel } from "../components/ui/field"
 import { Input } from "../components/ui/input"
 import { cn } from "../lib/utils"
+import { useMutation } from "@tanstack/react-query"
+import { login } from "../http/api"
+import { useNavigate } from "react-router"
 
 const LoginPage = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => {
 
+  const navigate = useNavigate()
+
   const emailRef = useRef<HTMLInputElement>(null)
   const passwordRef = useRef<HTMLInputElement>(null)
+
+  // Sending data in server --> mutation
+  // Mutations
+  const mutation = useMutation({
+    mutationFn: login,
+    onSuccess: () => {
+      // Invalidate and refetch
+      console.log('Login successful');
+      navigate('/dashboard/home')
+    },
+  })
 
   const handleLoginSubmit = (e?: React.MouseEvent) => {
     e?.preventDefault();
@@ -18,6 +34,10 @@ const LoginPage = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>
 
     console.log('Sign in info', { email, password });
 
+    if (!email || !password) {
+      return alert('Please enter email and password');
+    }
+    mutation.mutate({ email, password })
     // make server call
 
   }

@@ -1,0 +1,13 @@
+import axios from "axios";
+import { config } from "../config/config";
+
+const api = axios.create({
+  baseURL: config.backEndDomain,
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
+
+export const login = async (data: { email: string; password: string }) => {
+  return api.post("/api/users/login", data);
+};

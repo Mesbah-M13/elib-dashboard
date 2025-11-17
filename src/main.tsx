@@ -6,6 +6,7 @@ import { RouterProvider } from 'react-router'
 import { router } from './router.tsx'
 
 import {
+  QueryClient,
   QueryClientProvider
 } from '@tanstack/react-query'
 
