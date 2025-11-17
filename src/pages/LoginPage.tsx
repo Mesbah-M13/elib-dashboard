@@ -1,3 +1,4 @@
+import { useRef } from "react"
 import { Button } from "../components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../components/ui/card"
 import { Field, FieldDescription, FieldGroup, FieldLabel } from "../components/ui/field"
@@ -5,6 +6,22 @@ import { Input } from "../components/ui/input"
 import { cn } from "../lib/utils"
 
 const LoginPage = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => {
+
+  const emailRef = useRef<HTMLInputElement>(null)
+  const passwordRef = useRef<HTMLInputElement>(null)
+
+  const handleLoginSubmit = (e?: React.MouseEvent) => {
+    e?.preventDefault();
+
+    const email = emailRef.current?.value
+    const password = passwordRef.current?.value
+
+    console.log('Sign in info', { email, password });
+
+    // make server call
+
+  }
+
   return (
     <div className="flex min-h-svh w-full items-center justify-center p-6 md:p-10">
       <div className="w-full max-w-sm">
@@ -22,6 +39,7 @@ const LoginPage = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>
                   <Field>
                     <FieldLabel htmlFor="email">Email</FieldLabel>
                     <Input
+                      ref={emailRef}
                       id="email"
                       type="email"
                       placeholder="m@example.com"
@@ -38,15 +56,15 @@ const LoginPage = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>
                         Forgot your password?
                       </a>
                     </div>
-                    <Input id="password" type="password" required />
+                    <Input ref={passwordRef} id="password" type="password" required />
                   </Field>
                   <Field>
-                    <Button type="submit">Login</Button>
+                    <Button onClick={handleLoginSubmit} type="submit">Login</Button>
                     {/* <Button variant="outline" type="button">
                   Login with Google
                 </Button> */}
                     <FieldDescription className="text-center">
-                      Don&apos;t have an account? <a href="/register">Sign up</a>
+                      Don&apos;t have an account? <a href="/auth/register">Sign up</a>
                     </FieldDescription>
                   </Field>
                 </FieldGroup>
