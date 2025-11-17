@@ -7,6 +7,7 @@ import { cn } from "../lib/utils"
 import { useMutation } from "@tanstack/react-query"
 import { login } from "../http/api"
 import { useNavigate } from "react-router"
+import { LoaderCircle } from "lucide-react"
 
 const LoginPage = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => {
 
@@ -51,6 +52,7 @@ const LoginPage = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>
               <CardTitle>Login to your account</CardTitle>
               <CardDescription>
                 Enter your email below to login to your account
+                {mutation.isPaused && <div>Loading...</div>}
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -79,7 +81,15 @@ const LoginPage = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>
                     <Input ref={passwordRef} id="password" type="password" required />
                   </Field>
                   <Field>
-                    <Button onClick={handleLoginSubmit} type="submit">Login</Button>
+                    {/* <Button onClick={handleLoginSubmit} type="submit">Login</Button> */}
+                    <Button
+                      onClick={handleLoginSubmit}
+                      className="w-full"
+                      disabled={mutation.isPending}>
+                      {mutation.isPending && <LoaderCircle className="animate-spin" />}
+
+                      <span className="ml-2">Sign in</span>
+                    </Button>
                     {/* <Button variant="outline" type="button">
                   Login with Google
                 </Button> */}
