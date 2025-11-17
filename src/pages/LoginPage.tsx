@@ -51,8 +51,8 @@ const LoginPage = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>
             <CardHeader>
               <CardTitle>Login to your account</CardTitle>
               <CardDescription>
-                Enter your email below to login to your account
-                {mutation.isPaused && <div>Loading...</div>}
+                Enter your email below to login to your account <br />
+                {mutation.isError && <span className="text-red-500 text-sm ">{mutation.error.message} / {'Something went wrong'}</span>}
               </CardDescription>
             </CardHeader>
             <CardContent>
