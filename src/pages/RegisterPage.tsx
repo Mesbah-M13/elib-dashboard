@@ -4,13 +4,15 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../co
 import { Field, FieldDescription, FieldGroup, FieldLabel } from "../components/ui/field"
 import { Input } from "../components/ui/input"
 import { useRef } from "react"
-import { useNavigate } from "react-router"
+import { Link, useNavigate } from "react-router"
 import { LoaderCircle } from "lucide-react"
 import { register } from "../http/api"
+import { Label } from "../components/ui/label"
+import useTokenStore from "../store"
 
-function RegisterPage({ ...props }: React.ComponentProps<typeof Card>) {
+function RegisterPage() {
 
-
+  const setToken = useTokenStore((state) => state.setToken);
   const navigate = useNavigate()
 
   const nameRef = useRef<HTMLInputElement>(null)
@@ -21,15 +23,18 @@ function RegisterPage({ ...props }: React.ComponentProps<typeof Card>) {
   // Mutations
   const mutation = useMutation({
     mutationFn: register,
-    onSuccess: () => {
+    onSuccess: (response) => {
       // Invalidate and refetch
-      console.log('Login successful');
+      console.log('Registration successful');
+      setToken(response.data.accessToken);
+
       navigate('/dashboard/home')
+    }, onError: (error: any) => {
+      console.error("Registration error:", error.response?.data || error.message);
     },
   })
 
-  const handleRegisterSubmit = (e?: React.MouseEvent) => {
-    e?.preventDefault();
+  const handleRegisterSubmit = () => {
 
     const name = nameRef.current?.value
     const email = emailRef.current?.value
@@ -47,78 +52,65 @@ function RegisterPage({ ...props }: React.ComponentProps<typeof Card>) {
   }
 
   return (
-    <div className="flex min-h-svh w-full items-center justify-center p-6 md:p-10">
-      <div className="w-full max-w-sm">
-        <Card {...props}>
-          <CardHeader>
-            <CardTitle>Create an account</CardTitle>
-            <CardDescription>
-              Enter your information below to create your account
-            </CardDescription>
-            {mutation.isError && <span className="text-red-500 text-sm ">{mutation.error.message} / {'Something went wrong'}</span>}
-          </CardHeader>
-          <CardContent>
-            <form>
-              <FieldGroup>
-                <Field>
-                  <FieldLabel htmlFor="name">Full Name</FieldLabel>
-                  <Input ref={nameRef} id="name" type="text" placeholder="John Doe" required />
-                </Field>
-                <Field>
-                  <FieldLabel htmlFor="email">Email</FieldLabel>
-                  <Input
-                    ref={emailRef}
-                    id="email"
-                    type="email"
-                    placeholder="m@example.com"
-                    required
-                  />
-                  <FieldDescription>
-                    We&apos;ll use this to contact you. We will not share your email
-                    with anyone else.
-                  </FieldDescription>
-                </Field>
-                <Field>
-                  <FieldLabel htmlFor="password">Password</FieldLabel>
-                  <Input
-                    ref={passwordRef} id="password" type="password" required />
-                  <FieldDescription>
-                    Must be at least 8 characters long.
-                  </FieldDescription>
-                </Field>
-                {/* <Field>
-                  <FieldLabel htmlFor="confirm-password">
-                    Confirm Password
-                  </FieldLabel>
-                  <Input id="confirm-password" type="password" required />
-                  <FieldDescription>Please confirm your password.</FieldDescription>
-                </Field> */}
-                <FieldGroup>
-                  <Field>
-                    <Button
-                      onClick={handleRegisterSubmit}
-                      type="submit"
-                      disabled={mutation.isPending}
-                      className="w-full">
-                      {mutation.isPending && <LoaderCircle className="animate-spin" />}
-                      <span className="ml-2">Create Account</span>
-                    </Button>
-                    {/* <Button variant="outline" type="button">
-                      Sign up with Google
-                    </Button> */}
-                    <FieldDescription className="px-6 text-center">
-                      Already have an account? <a href='/auth/login' >Sign in</a>
-                    </FieldDescription>
-                  </Field>
-                </FieldGroup>
-              </FieldGroup>
-            </form>
-          </CardContent>
-        </Card>
-      </div>
-    </div>
+    <section className="flex justify-center items-center h-screen">
+      <Card className="w-full max-w-sm">
+        <CardHeader>
+          <CardTitle className="text-xl">Sign Up</CardTitle>
+          <CardDescription>Enter your information to create an account</CardDescription>
 
+          {mutation.isError && (
+            <span className="text-red-500 text-sm">Something went wrong</span>
+          )}
+        </CardHeader>
 
+        <CardContent>
+          <div className="grid gap-4">
+
+            <div className="grid gap-2">
+              <Label htmlFor="name">Name</Label>
+              <Input ref={nameRef} id="name" placeholder="Max" required />
+            </div>
+
+            <div className="grid gap-2">
+              <Label htmlFor="email">Email</Label>
+              <Input
+                ref={emailRef}
+                id="email"
+                type="email"
+                placeholder="m@example.com"
+                required
+              />
+            </div>
+
+            <div className="grid gap-2">
+              <Label htmlFor="password">Password</Label>
+              <Input
+                ref={passwordRef}
+                id="password"
+                type="password"
+                required
+              />
+            </div>
+
+            {/* BUTTON — NO FORM */}
+            <Button
+              onClick={handleRegisterSubmit}
+              className="w-full"
+              disabled={mutation.isPending}
+            >
+              {mutation.isPending && <LoaderCircle className="animate-spin" />}
+              <span className="ml-2">Create an account</span>
+            </Button>
+
+          </div>
+
+          <div className="mt-4 text-center text-sm">
+            Already have an account?{" "}
+            <Link to="/auth/login" className="underline">Sign in</Link>
+          </div>
+        </CardContent>
+      </Card>
+    </section>
 
   )
 }
