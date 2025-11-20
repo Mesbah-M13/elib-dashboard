@@ -8,10 +8,12 @@ import { useMutation } from "@tanstack/react-query"
 import { login } from "../http/api"
 import { useNavigate } from "react-router"
 import { LoaderCircle } from "lucide-react"
+import useTokenStore from "../store"
 
 const LoginPage = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => {
 
   const navigate = useNavigate()
+  const setToken = useTokenStore((state) => state.setToken)
 
   const emailRef = useRef<HTMLInputElement>(null)
   const passwordRef = useRef<HTMLInputElement>(null)
@@ -20,8 +22,9 @@ const LoginPage = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>
   // Mutations
   const mutation = useMutation({
     mutationFn: login,
-    onSuccess: () => {
+    onSuccess: (response) => {
       // Invalidate and refetch
+      setToken(response.data.accessToken)
       console.log('Login successful');
       navigate('/dashboard/home')
     },
