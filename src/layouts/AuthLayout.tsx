@@ -5,7 +5,7 @@ import useTokenStore from '../store';
 const AuthLayout = () => {
   const token = useTokenStore((state) => state.token);
 
-  if (token === '') {
+  if (token) {
     return <Navigate to={'/dashboard/home'} replace />;
   }
   return (

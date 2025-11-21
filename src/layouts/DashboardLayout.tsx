@@ -1,4 +1,4 @@
-import { Bell, CircleUser, Home, LineChart, Menu, Package, Package2, Search, ShoppingCart, Users } from 'lucide-react';
+import { Bell, CircleUser, Ghost, Home, LineChart, Menu, Package, Package2, Search, ShoppingCart, Users } from 'lucide-react';
 import React from 'react'
 import { Link, Navigate, NavLink, Outlet } from 'react-router';
 import { Button } from '../components/ui/button';
@@ -11,10 +11,17 @@ import useTokenStore from '../store';
 
 const DashboardLayout = () => {
 
-  const token = useTokenStore((state) => state.token);
+  // const { token, setToken } = useTokenStore((state) => state);
+  const token = useTokenStore(state => state.token);
+  const setToken = useTokenStore(state => state.setToken);
 
   if (token === '') {
     return <Navigate to={'/auth/login'} replace />;
+  }
+
+  const logout = () => {
+    console.log('Logged Out...');
+    setToken('')
   }
 
   return (
@@ -167,7 +174,7 @@ const DashboardLayout = () => {
               <DropdownMenuItem>Support</DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem>
-                <Button >
+                <Button onClick={logout} variant={'link'} >
                   Logout
                 </Button>
               </DropdownMenuItem>
