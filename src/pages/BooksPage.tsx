@@ -7,8 +7,9 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '.
 import { Badge } from '../components/ui/badge'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from '../components/ui/dropdown-menu'
 import { Button } from '../components/ui/button'
-import { MoreHorizontal } from 'lucide-react'
+import { CirclePlus, MoreHorizontal } from 'lucide-react'
 import type { Book } from '../types'
+import { Link } from 'react-router'
 
 const BooksPage = () => {
 
@@ -21,17 +22,23 @@ const BooksPage = () => {
   console.log("data", data);
   return (
     <div>
-      <Breadcrumb>
-        <BreadcrumbList>
-          <BreadcrumbItem>
-            <BreadcrumbLink href="/dashboard/home">Home</BreadcrumbLink>
-          </BreadcrumbItem>
-          <BreadcrumbSeparator />
-          <BreadcrumbItem>
-            <BreadcrumbPage>Books</BreadcrumbPage>
-          </BreadcrumbItem>
-        </BreadcrumbList>
-      </Breadcrumb>
+      <div className='flex items-center justify-between'>
+        <Breadcrumb>
+          <BreadcrumbList>
+            <BreadcrumbItem>
+              <BreadcrumbLink href="/dashboard/home">Home</BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbPage>Books</BreadcrumbPage>
+            </BreadcrumbItem>
+          </BreadcrumbList>
+        </Breadcrumb>
+        <Link to='/dashboard/books/create' className='bg-black rounded-2xl text-white flex gap-1 items-center'>
+          <Button>  <CirclePlus size={15} />
+            <span>Add Book</span> </Button>
+        </Link>
+      </div>
 
 
       <Card className="mt-6">
