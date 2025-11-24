@@ -21,3 +21,10 @@ export const register = async (data: {
 };
 
 export const getBooks = async () => api.get("api/books");
+
+export const createBook = async (data: FormData) =>
+  api.post("/api/books", data, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
